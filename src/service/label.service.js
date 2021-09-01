@@ -3,7 +3,7 @@ const connection = require("../app/database");
 class LabelService {
   async create(name) {
     const statement = `INSERT INTO label (name) VALUES (?)`;
-    const result = await connection.execute(statement, [name]);
+    const [result] = await connection.execute(statement, [name]);
     console.log("create_result", result);
     return result;
   }
