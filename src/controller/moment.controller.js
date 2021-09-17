@@ -1,3 +1,6 @@
+const fs = require("fs");
+const { UPLOADS_PICTURE } = require("../constants/file-types");
+const fileService = require("../service/file.service");
 const service = require("../service/moment.service");
 class MomentController {
   async create(ctx, next) {
@@ -76,6 +79,20 @@ class MomentController {
       code: 0,
       message: "添加成功",
     };
+  }
+
+  async getFileInfo(ctx, next) {
+    let { fileName } = ctx.params;
+    const { type } = ctx.query;
+    const fileInfo = await fileService.getFileInfo(fileName);
+    if (["small", "middle", "large"].some((item) => item == type)) {
+      fileName = fileName + "-" + type;
+    }
+    console.log('fileName',fileName)
+    if (fileInfo) {
+      ctx.response.set("content-type", fileInfo.mimetype);
+      ctx.body = fs.createReadStream(`${UPLOADS_PICTURE}/${fileName}`);
+    }
   }
 }
 

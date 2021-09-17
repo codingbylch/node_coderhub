@@ -16,6 +16,11 @@ class UserService {
     console.log("result", result);
     return result;
   }
+
+  async updateAvatorUrlById(user_id, avatorUrl) {
+    const statement = "UPDATE users SET avator_url = ? WHERE id = ?;";
+    const result = await connection.execute(statement, [avatorUrl, user_id]);
+  }
 }
 
 module.exports = new UserService();
